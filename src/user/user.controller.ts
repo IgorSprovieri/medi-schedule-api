@@ -8,6 +8,7 @@ import {
   Request,
   RequestMethod,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -72,5 +73,20 @@ export class UserController {
     }
 
     return user;
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiResponse({ status: 200, description: 'User Deleted' })
+  @ApiResponse({ status: 404, description: 'User Not Found' })
+  async delete(@Request() req: RequestMethod): Promise<User> {
+    const user = await this.userservice.findByEmail(req['user'].email);
+
+    if (!user) {
+      throw new HttpException('User Not Found', 404);
+    }
+
+    return await this.userservice.delete(req['user'].id);
   }
 }
