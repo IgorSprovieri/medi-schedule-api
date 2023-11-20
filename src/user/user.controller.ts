@@ -1,8 +1,18 @@
-import { Controller, Post, Body, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  Get,
+  UseGuards,
+  Request,
+  RequestMethod,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto';
 import { User } from './user.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('user')
 @Controller('user')
@@ -21,5 +31,20 @@ export class UserController {
     }
 
     return await this.userservice.create(createUserDto);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get user' })
+  @ApiResponse({ status: 200, description: 'Get User' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async get(@Request() req: RequestMethod): Promise<User> {
+    const user = await this.userservice.findByEmail(req['user'].email);
+
+    if (!user) {
+      throw new HttpException('User Not Found', 404);
+    }
+
+    return user;
   }
 }
