@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { User as UserModel, UserRole } from '@prisma/client';
+import { User as UserModel } from '@prisma/client';
 import { IsEmail, IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { UserRole } from './types';
 
 enum UserRoleEnum {
   USER = 'USER',
