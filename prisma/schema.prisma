@@ -16,18 +16,27 @@ enum UserRole {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String      @id @default(uuid())
   name     String
-  email    String @unique
+  email    String      @unique
   password String 
   role     UserRole
   clinics  Clinic[]
 }
 
+model Speciality {
+  id            String     @id @default(uuid())
+  speciality    String
+  clinics       Clinic[]
+}
+
 model Clinic {
-  id            String @id @default(uuid())
-  user          User   @relation(fields: [user_id], references: [id])
+  id            String       @id @default(uuid())
+  user          User         @relation(fields: [user_id], references: [id])
   user_id       String
+  speciality    Speciality   @relation(fields: [speciality_id], references: [id])
+  speciality_id String       
   clinic_name   String
   clinic_adress String
 }
+

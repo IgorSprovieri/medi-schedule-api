@@ -11,6 +11,10 @@ export class Clinic implements PrismaClinic {
   @IsUUID()
   user_id: string;
 
+  @ApiProperty({ description: 'Speciality UUID' })
+  @IsUUID()
+  speciality_id: string;
+
   @ApiProperty()
   @IsString()
   clinic_name: string;

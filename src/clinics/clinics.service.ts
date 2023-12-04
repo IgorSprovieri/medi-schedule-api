@@ -10,10 +10,18 @@ export class ClinicsService {
 
   async create(
     user_id: string,
-    createClinicDto: CreateClinicDto,
+    { speciality_id, ...createClinicDto }: CreateClinicDto,
   ): Promise<Clinic> {
     return await this.prismaService.clinic.create({
-      data: { user_id, ...createClinicDto },
+      data: {
+        user: {
+          connect: { id: user_id },
+        },
+        speciality: {
+          connect: { id: speciality_id },
+        },
+        ...createClinicDto,
+      },
     });
   }
 
